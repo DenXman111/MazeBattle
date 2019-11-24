@@ -7,6 +7,7 @@ JNIEXPORT jint JNICALL Java_com_game_nativeclass_Native_getTable (JNIEnv * env, 
         jint t[N];
         t[1] = 69;
         std::cout << t[1] << std::endl;
-        env -> ReleaseIntArrayElements(table, t, 0);
+        //env -> ReleaseIntArrayElements(table, t, 0);
+        env -> SetIntArrayRegion(table, 0, N, t);
         return 0;
 }

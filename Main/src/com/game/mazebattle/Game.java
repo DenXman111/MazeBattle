@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.game.gamemap.GameMap;
 import com.game.managers.GameInputProcessor;
 import com.game.managers.GameKeys;
 import com.game.managers.GameStateManager;
@@ -12,6 +13,8 @@ import com.game.managers.GameStateManager;
 public class Game implements ApplicationListener {
     public static int WIDTH;
     public static int HEIGHT;
+
+    public static GameMap gameMap = new GameMap(1, 32);
 
     public static OrthographicCamera camera;
     private GameStateManager gameStateManager;
