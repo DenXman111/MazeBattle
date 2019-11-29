@@ -10,6 +10,9 @@ public abstract class GameState {
         init();
     }
 
+    public void changeStateTo(int state){
+        this.state.setState(state);
+    }
     public abstract void init();
     public abstract void update(float dt);
     public abstract void draw();

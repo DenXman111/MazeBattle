@@ -3,6 +3,7 @@ package com.game.mazebattle;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.game.gamemap.GameMap;
@@ -10,11 +11,11 @@ import com.game.managers.GameInputProcessor;
 import com.game.managers.GameKeys;
 import com.game.managers.GameStateManager;
 
+import javax.swing.*;
+
 public class Game implements ApplicationListener {
     public static int WIDTH;
     public static int HEIGHT;
-
-    public static GameMap gameMap = new GameMap(1, 32);
 
     public static OrthographicCamera camera;
     private GameStateManager gameStateManager;
@@ -34,7 +35,7 @@ public class Game implements ApplicationListener {
 
     @Override
     public void render(){
-        Gdx.gl.glClearColor( 0, (float)0.5, (float)0.33, 1);
+        Gdx.gl.glClearColor(0.25f, 0.25f, 0.25f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gameStateManager.update(Gdx.graphics.getDeltaTime());
