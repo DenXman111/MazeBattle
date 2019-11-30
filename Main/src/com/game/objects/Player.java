@@ -10,7 +10,7 @@ public class Player extends GameObject {
 
     private boolean canGo(int x, int y, PlayState playState){
         try {
-            return playState.gameMap.getCage(x, y) != 1;
+            return playState.getGameMap().getCage(x, y) != 1;
         } catch (MapRangeOutException e) {
             return false;
         }

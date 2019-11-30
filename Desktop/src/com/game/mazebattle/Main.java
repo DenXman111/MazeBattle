@@ -13,7 +13,7 @@ public class Main {
         //System.out.println(table[0]);
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "PortalMaze";
-        cfg.width = 960;
+        cfg.width = 980;
         cfg.height = 640;
         cfg.useGL30 = false;
         cfg.resizable = false;

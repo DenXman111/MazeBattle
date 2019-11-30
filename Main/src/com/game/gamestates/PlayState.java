@@ -14,18 +14,16 @@ import com.game.objects.Player;
 import static com.game.mazebattle.Game.*;
 
 public class PlayState extends GameState {
-    private int componentNum = -1;
-    private int distToFinish = -1;
-    private int portalNumHere = -1;
 
-    public GameMap gameMap;
+    private GameMap gameMap;
 
     int k = 0;
     private Player player;
     private ShapeRenderer shapeRenderer;
+
     public PlayState(GameStateManager gameStateManager){
         super(gameStateManager);
-        gameMap = new GameMap(1, 32, this, -1, -1);
+        gameMap = new GameMap(1, 32, this, -1, -1, true);
         shapeRenderer = new ShapeRenderer();
         for (int i = 0; i < gameMap.getN(); i++)
             for (int j = 0; j < gameMap.getN(); j++) {
@@ -40,28 +38,8 @@ public class PlayState extends GameState {
             }
     }
 
-    public int getComponentNum(){
-        return componentNum;
-    }
-
-    public int getDistToFinish(){
-        return distToFinish;
-    }
-
-    public int getPortalNumHere(){
-        return portalNumHere;
-    }
-
-    public void setComponentNum(int x){
-        componentNum = x;
-    }
-
-    public void setDistToFinish(int x){
-        distToFinish = x;
-    }
-
-    public void setPortalNumHere(int x){
-        portalNumHere = x;
+    public GameMap getGameMap(){
+        return gameMap;
     }
 
     public void setGameMap(GameMap map){
@@ -69,12 +47,19 @@ public class PlayState extends GameState {
     }
 
     @Override
-    public void init() {
-
-    }
+    public void init() { }
 
     @Override
     public void update(float dt) {
+        /*try {
+            gameMap.getGeneratorThread().join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+        //System.out.println(gameMap.isGenerated());
+        if (!gameMap.isGenerated()) return;
+
+
         //moving
         if (GameKeys.isPressed(Input.Keys.UP)) player.tryUP(this);
         if (GameKeys.isPressed(Input.Keys.DOWN)) player.tryDOWN(this);
@@ -82,7 +67,8 @@ public class PlayState extends GameState {
         if (GameKeys.isPressed(Input.Keys.RIGHT)) player.tryRIGHT(this);
 
         //finish managing
-        if (player.getX() == gameMap.getFinish().getX() && player.getY() == gameMap.getFinish().getY()) gameMap.getFinish().stepOnFinish(this);
+        if (player.getX() == gameMap.getFinish().getX() && player.getY() == gameMap.getFinish().getY())
+            gameMap.getFinish().stepOnFinish(this);
 
         //portal managing
         if (gameMap.isPortalHere(player.getX(), player.getY())) {
@@ -96,6 +82,9 @@ public class PlayState extends GameState {
 
     @Override
     public void draw() {
+        //System.out.println(gameMap.isGenerated());
+        if (!gameMap.isGenerated()) return;
+
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         int curr = (HEIGHT - gameMap.getGlobalN()) / 2;
