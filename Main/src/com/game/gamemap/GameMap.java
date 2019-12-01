@@ -3,12 +3,9 @@ package com.game.gamemap;
 import com.game.exceptions.MapRangeOutException;
 import com.game.exceptions.NextMapException;
 import com.game.exceptions.NoPortalHere;
-import com.game.exceptions.NotGeneratedException;
 import com.game.gamestates.PlayState;
-import com.game.mazebattle.Game;
 import com.game.nativeclass.Native;
 import com.game.objects.Finish;
-import com.game.objects.Player;
 import com.game.objects.Portal;
 
 import java.util.Random;
@@ -19,10 +16,14 @@ public class GameMap {
     private int globalSize = 512;
     private Finish finish;
     private volatile Portal[] portals;
-    private int portalN = 4;
+    private int portalN = 1;
     private int N;
     private PlayState playState;
+
+    private int [][]tab;
+    private int tabIdx;
     private volatile boolean generated;
+    private volatile boolean sorryButItTimeToStopGeneration = false;
     private Thread generatorThread;
 
     private int componentNum;
@@ -115,13 +116,17 @@ public class GameMap {
         return false;
     }
 
-    public Portal getPortalHere(int x, int y) throws NoPortalHere{
+    public Portal getPortalHere(int x, int y) throws NoPortalHere {
         if (!isPortalHere(x, y)) throw new NoPortalHere();
         for (int i = 0; i < portalN; i++) if (portals[i].getX() == x && portals[i].getY() == y) return portals[i];
         return null;
     }
 
     public GameMap gameMapChanger(GameMap map){
+        for (int i = 0; i < map.portalN; i++) nextGameMaps[i].sorryButItTimeToStopGeneration = true;
+        if (!map.generated) map.fastNativeMapGeneration(map.N); else {
+            map.writeNativeResult(map.tab[map.tabIdx % 2]);
+        }
         this.isCurrent = false;
         map.isCurrent = true;
         map.generateNextMaps();
@@ -152,7 +157,6 @@ public class GameMap {
                 if (map[i][j] == 3) finish = new Finish(i, j);
             }
         }
-        generated = true;
     }
 
     private void fastNativeMapGeneration(int N) {
@@ -160,18 +164,24 @@ public class GameMap {
         int[] tab = new int[N * N + 3];
 
         new Native().getTable(tab, N, portalN, -1, -1, -1, -1, -1);
+        generated = true;
         writeNativeResult(tab);
     }
 
     private void nativeMapGeneration(int N, int playerX, int playerY) {
         map = new int[N][N];
-        int[] tab = new int[N * N + 3];
-        //while (true) {
-            new Native().getTable(tab, N, portalN, componentNum, distToFinish, portalNumHere, playerX, playerY);
-        System.out.println("Got map8");
-
-            writeNativeResult(tab);
-        //}
+        tab = new int[2][N * N + 3];
+        tabIdx = 0;
+        tab[tabIdx][N * N] = componentNum;
+        tab[tabIdx][N * N + 1] = distToFinish;
+        tab[tabIdx][N * N + 2] = portalNumHere;
+        while (!sorryButItTimeToStopGeneration) {
+            new Native().getTable(tab[(tabIdx + 1) % 2], N, portalN, tab[(tabIdx) % 2][N * N], tab[(tabIdx) % 2][N * N + 1], tab[(tabIdx) % 2][N * N + 2], playerX, playerY);
+            if (!sorryButItTimeToStopGeneration) {
+                ++tabIdx;
+                generated = true;
+            }
+        }
     }
 
     private void generateAllRandomMap(int N){
