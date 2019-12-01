@@ -10,15 +10,15 @@ import com.game.managers.GameKeys;
 import com.game.managers.GameStateManager;
 import com.game.mazebattle.Game;
 
-public class FinishedState extends GameState{
+public class MenuState extends GameState{
     private SpriteBatch spriteBatch;
     private BitmapFont titleFont;
     private BitmapFont font;
-    private final String title = "YOU WIN!!!";
-    private final String item1 = "PRESS SPACE TO RESTART";
+    private final String title = "PORTAL MAZE";
+    private final String item1 = "PRESS SPACE TO START";
 
 
-    public FinishedState(GameStateManager gameStateManager){
+    public MenuState(GameStateManager gameStateManager){
         super(gameStateManager);
     }
 
@@ -45,7 +45,7 @@ public class FinishedState extends GameState{
     public void draw() {
         spriteBatch.setProjectionMatrix(Game.camera.combined);
         spriteBatch.begin();
-        float width = 250;
+        float width = 300;
         titleFont.draw(spriteBatch, title, (Game.WIDTH - width)/ 2, 500);
 
         if (currTick > ticks) {
@@ -54,7 +54,7 @@ public class FinishedState extends GameState{
             if (red) font.setColor(Color.RED); else font.setColor(Color.WHITE);
 
         }
-        width = 420;
+        width = 400;
         font.draw(spriteBatch, item1, (Game.WIDTH - width)/ 2, 300);
         ++currTick;
 

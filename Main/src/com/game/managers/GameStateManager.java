@@ -2,6 +2,7 @@ package com.game.managers;
 
 import com.game.gamestates.FinishedState;
 import com.game.gamestates.GameState;
+import com.game.gamestates.MenuState;
 import com.game.gamestates.PlayState;
 
 public class GameStateManager {
@@ -11,13 +12,13 @@ public class GameStateManager {
     public static final int FINISHED = 2;
 
     public GameStateManager(){
-        setState(FINISHED);
+        setState(MENU);
     }
 
     public void setState(int state){
         if (gameState != null) gameState.dispose();
         if (state == MENU){
-
+            gameState = new MenuState(this);
         }
         if (state == PLAY){
             gameState = new PlayState(this);
@@ -27,8 +28,9 @@ public class GameStateManager {
         }
     }
 
-    public void restartGame(){
-        gameState = new PlayState(this);
+    public void startGame(){
+        setState(PLAY);
+        //gameState = new PlayState(this);
     }
 
     public void update(float dt){
