@@ -41,11 +41,6 @@ public class Game implements ApplicationListener {
         gameStateManager.update(Gdx.graphics.getDeltaTime());
         gameStateManager.draw();
 
-        if (GameKeys.isDown(Input.Keys.SPACE)) Gdx.gl.glClearColor(0, 1, 0, 1);
-        if (GameKeys.isDown(Input.Keys.SPACE)) Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (GameKeys.isPressed(Input.Keys.SPACE)) Gdx.gl.glClearColor((float)0.5, 0, 1, 1);
-        if (GameKeys.isPressed(Input.Keys.SPACE)) Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         GameKeys.update();
     }
 

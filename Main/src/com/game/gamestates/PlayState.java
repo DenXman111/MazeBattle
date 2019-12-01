@@ -3,15 +3,22 @@ package com.game.gamestates;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.game.exceptions.MapRangeOutException;
 import com.game.exceptions.NoPortalHere;
 import com.game.gamemap.GameMap;
 import com.game.managers.GameKeys;
 import com.game.managers.GameStateManager;
+import com.game.mazebattle.Game;
 import com.game.objects.Player;
 
 import static com.game.mazebattle.Game.*;
+import static java.lang.System.exit;
 
 public class PlayState extends GameState {
 
@@ -21,8 +28,15 @@ public class PlayState extends GameState {
     private Player player;
     private ShapeRenderer shapeRenderer;
 
+
+    private BitmapFont font32;
+    private BitmapFont font72;
+
     public PlayState(GameStateManager gameStateManager){
         super(gameStateManager);
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Amatic-Bold.ttf"));
+        font32 = fontGenerator.generateFont(32);
+        font72 = fontGenerator.generateFont(72);
         gameMap = new GameMap(1, 32, this, -1, -1, true);
         shapeRenderer = new ShapeRenderer();
         for (int i = 0; i < gameMap.getN(); i++)
@@ -46,8 +60,11 @@ public class PlayState extends GameState {
         gameMap = map;
     }
 
+    private SpriteBatch spriteBatch;
     @Override
-    public void init() { }
+    public void init() {
+        spriteBatch = new SpriteBatch();
+    }
 
     @Override
     public void update(float dt) {
@@ -89,6 +106,26 @@ public class PlayState extends GameState {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         int curr = (HEIGHT - gameMap.getGlobalN()) / 2;
         int cageSize = gameMap.getGlobalN() / gameMap.getN();
+
+        spriteBatch.setProjectionMatrix(Game.camera.combined);
+        spriteBatch.begin();
+
+        font72.draw(spriteBatch, "lvl: " + gameMap.getlvl(), 700, 550);
+
+        shapeRenderer.setColor(Color.PINK);
+        shapeRenderer.rect(720, 400, cageSize, cageSize);
+        font32.draw(spriteBatch, "  - player", 730, 420);
+
+        shapeRenderer.setColor(Color.YELLOW);
+        shapeRenderer.rect(720, 320, cageSize, cageSize);
+        font32.draw(spriteBatch, "  - portal", 730, 340);
+
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(720, 240, cageSize, cageSize);
+        font32.draw(spriteBatch, "  - finish", 730, 260);
+
+        spriteBatch.end();
+
         for (int i = 0; i < gameMap.getN(); i++)
             for (int j = 0; j < gameMap.getN(); j++) {
                 if (i == player.getX() && j == player.getY()) continue;

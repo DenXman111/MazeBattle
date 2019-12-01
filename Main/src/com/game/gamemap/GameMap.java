@@ -161,7 +161,7 @@ public class GameMap {
 
     private void fastNativeMapGeneration(int N) {
         map = new int[N][N];
-        int[] tab = new int[N * N + 3];
+        int[] tab = new int[N * N + 4];
 
         new Native().getTable(tab, N, portalN, -1, -1, -1, -1, -1);
         generated = true;
@@ -170,14 +170,14 @@ public class GameMap {
 
     private void nativeMapGeneration(int N, int playerX, int playerY) {
         map = new int[N][N];
-        tab = new int[2][N * N + 3];
+        tab = new int[2][N * N + 4];
         tabIdx = 0;
         tab[tabIdx][N * N] = componentNum;
         tab[tabIdx][N * N + 1] = distToFinish;
         tab[tabIdx][N * N + 2] = portalNumHere;
         while (!sorryButItTimeToStopGeneration) {
             new Native().getTable(tab[(tabIdx + 1) % 2], N, portalN, tab[(tabIdx) % 2][N * N], tab[(tabIdx) % 2][N * N + 1], tab[(tabIdx) % 2][N * N + 2], playerX, playerY);
-            if (!sorryButItTimeToStopGeneration) {
+            if (!sorryButItTimeToStopGeneration && tab[(tabIdx + 1) % 2][N * N + 3] == 1) {
                 ++tabIdx;
                 generated = true;
             }
