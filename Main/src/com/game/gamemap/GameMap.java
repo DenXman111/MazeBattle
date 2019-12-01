@@ -15,13 +15,13 @@ public class GameMap {
     private int lvl;
     private int globalSize = 512;
     private Finish finish;
-    private volatile Portal[] portals;
-    private int portalN = 1;
+    private Portal[] portals;
+    private int portalN = 4;
     private int N;
     private PlayState playState;
 
-    private int [][]tab;
-    private int tabIdx;
+    private volatile int [][]tab;
+    private volatile int tabIdx;
     private volatile boolean generated;
     private volatile boolean sorryButItTimeToStopGeneration = false;
     private Thread generatorThread;

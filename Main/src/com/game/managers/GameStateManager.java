@@ -11,7 +11,7 @@ public class GameStateManager {
     public static final int FINISHED = 2;
 
     public GameStateManager(){
-        setState(PLAY);
+        setState(FINISHED);
     }
 
     public void setState(int state){
@@ -25,6 +25,10 @@ public class GameStateManager {
         if (state == FINISHED){
             gameState = new FinishedState(this);
         }
+    }
+
+    public void restartGame(){
+        gameState = new PlayState(this);
     }
 
     public void update(float dt){

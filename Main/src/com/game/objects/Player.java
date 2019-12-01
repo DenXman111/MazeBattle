@@ -17,18 +17,18 @@ public class Player extends GameObject {
     }
 
     public void tryUP(PlayState playState){
-        if (canGo(x, y + 1, playState)) ++y;
+        if (canGo(x, (y + 1) % playState.getGameMap().getN(), playState)) y = (y + 1) % playState.getGameMap().getN();
     }
 
     public void tryDOWN(PlayState playState){
-        if (canGo(x , y - 1, playState)) --y;
+        if (canGo(x , (y - 1 + playState.getGameMap().getN()) % playState.getGameMap().getN(), playState)) y = (y - 1 + playState.getGameMap().getN()) % playState.getGameMap().getN();
     }
 
     public void tryLEFT(PlayState playState){
-        if (canGo(x - 1, y, playState)) --x;
+        if (canGo((x - 1 + playState.getGameMap().getN()) % playState.getGameMap().getN(), y, playState)) x = (x - 1 + playState.getGameMap().getN()) % playState.getGameMap().getN();
     }
 
     public void tryRIGHT(PlayState playState){
-        if (canGo(x + 1, y, playState)) ++x;
+        if (canGo((x + 1) % playState.getGameMap().getN(), y, playState)) x = (x + 1) % playState.getGameMap().getN();
     }
 }
